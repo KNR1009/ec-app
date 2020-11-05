@@ -3,34 +3,43 @@ import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
 
-export const signIn = () => {
+export const signIn = (email, password) => {
+  const dispatch = useDispatch;
   // コールバック関数を返り値として持つようにする
-  return async(dispatch, getState) => {
-  // 現在のstateを取得する
-  const state = getState();
-  const isSignedIn = state.users.isSignedIn;
+  return async(dispatch) => {
+    // バリデーションを行う
+    if ( email === "" || password === "") {
+      alert("必須項目が未入力です");
+      return false;
+    }
+    
+    auth.signInWithEmailAndPassword(email, password).then((result) => {
+      const user = result.user;
 
-  // ログイン状態だった場合にgithubんおAPIを叩く(非同期処理)
-  if(!isSignedIn){
-    const url = "https://api.github.com/users/aponasi178cm";
+      // ユーザが存在すれば処理にすすむ
+      if (user) {
+        const uid = user.uid;
+        db.collection("users")
+          .doc(uid)
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.data();
 
-    // 非同期処理を記述
-    const response = await fetch(url).then(res => res.json()).catch(()=>null)
+            // 以下でアクションを呼び出しsiginの処理を行う
+            dispatch(
+              signInAction({
+                isSignedIn: true,
+                role: data.role,
+                uid: uid,
+                username: data.username,
+              })
+            );
 
-    console.log(response);
+            dispatch(push("/"));
+          });
+      }
+    });
 
-    const username = response.login;
-
-    // 取得したレスポンスをstoreに格納する
-    dispatch(signInAction({
-      isSignedIn: true,
-      uid: '1011',
-      username: username
-    }))
-    };
-
-    // 成功したらHomeに遷移する
-    dispatch(push('/'));
   }
 
   // 上記の記述を先ほどのLoginコンポーネントのクリック時のイベントで発火するようにする
