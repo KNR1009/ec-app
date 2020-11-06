@@ -3,6 +3,43 @@ import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
 
+
+// 認証リッスン
+export const listenAuthState = () =>{
+
+  // redux-thunkを利用定型文
+  return async (dispatch) =>{
+    return auth.onAuthStateChanged(user =>{
+      // 認証されていた場合はstateを変更
+      if(user){   
+        const uid = user.uid;
+        db.collection("users")
+          .doc(uid)
+          .get()
+          .then((snapshot) => {
+            const data = snapshot.data();
+
+            // 以下でアクションを呼び出しsiginの処理を行う
+            dispatch(
+              signInAction({
+                isSignedIn: true,
+                role: data.role,
+                uid: uid,
+                username: data.username,
+              })
+            );
+
+            dispatch(push("/"));
+          });
+
+      }else{
+        dispatch(push('/signIn'))
+      }
+    })
+  }
+}
+
+// ログイン
 export const signIn = (email, password) => {
   const dispatch = useDispatch;
   // コールバック関数を返り値として持つようにする
@@ -45,6 +82,19 @@ export const signIn = (email, password) => {
   // 上記の記述を先ほどのLoginコンポーネントのクリック時のイベントで発火するようにする
 }
 
+// ログアウト
+
+export const signOut = () => {
+  return async (dispatch) => {
+    auth.signOut()
+    .then(()=>{
+      dispatch(push('/'))
+    })
+  }
+}
+
+
+// 新規登録
 export const signUp = (username, email, password, confirmPassword) => {
   return async (dispatch) => {
     // Validations
