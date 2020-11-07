@@ -2,7 +2,8 @@ import {signInAction} from "./actions";
 import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
-import styled from 'styled-components';
+
+
 
 
 // 認証リッスン
