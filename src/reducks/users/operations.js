@@ -2,6 +2,7 @@ import {signInAction} from "./actions";
 import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
+import styled from 'styled-components';
 
 
 // 認証リッスン
@@ -93,6 +94,24 @@ export const signOut = () => {
   }
 }
 
+// パスワードを再設定
+export const restPassword = (email) => {
+  return async (dispatch) => {
+    // バリデーションを行う
+    if (email === "" ) {
+      alert("必須項目が未入力です");
+      return false;
+    }else{
+      auth.sendPasswordResetEmail(email)
+      .then(()=>{
+        alert('入力されたメールにパスワードリセット用のメールを送りました')
+        dispatch(push('/signin'))
+      }).catch(()=>{
+          alert('パスワードリセットに失敗しました')
+      })
+    }
+  }
+}
 
 // 新規登録
 export const signUp = (username, email, password, confirmPassword) => {
