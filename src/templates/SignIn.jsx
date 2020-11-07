@@ -3,7 +3,7 @@ import { TextField, PrimaryButton } from "../componets/UIkit/index";
 import { signIn } from "../reducks/users/operations";
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
-// import styled from "@emotion/styled";
+import styled from "@emotion/styled";
 
 const SignIn = () => {
   const dispatch = useDispatch();
@@ -58,15 +58,26 @@ const SignIn = () => {
           onClick={() => dispatch(signIn(email, password))}
         />
         <div className="module-spacer--medium"></div>
-        <p onClick={() => dispatch(push("/signup"))}>
-          アカウントを持っていない方はこちら
-        </p>
-        <p onClick={() => dispatch(push("/signin/reset"))}>
-          パスワードを忘れた方はこちら
-        </p>
+        <Option>
+          <p className="noaccount" onClick={() => dispatch(push("/signup"))}>
+            アカウントを持っていない方はこちら
+          </p>
+          <p
+            className="passwordrest"
+            onClick={() => dispatch(push("/signin/reset"))}
+          >
+            パスワードを忘れた方はこちら
+          </p>
+        </Option>
       </div>
     </div>
   );
 };
+
+const Option = styled.div`
+  p {
+    cursor: pointer;
+  }
+`;
 
 export default SignIn;
