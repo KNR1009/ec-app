@@ -1,6 +1,9 @@
 // こちらにstateの初期状態を記述する
 
 const initialState = {
+  products:{
+    list:[]
+  },
   users: {
     isSignedIn: false,
     role: "",

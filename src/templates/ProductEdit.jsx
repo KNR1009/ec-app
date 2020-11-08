@@ -1,7 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import { TextField, PrimaryButton } from "../componets/UIkit/index";
+import { TextField, PrimaryButton, SelectBox } from "../componets/UIkit/index";
+import { saveProduct } from "../reducks/products/operations"
+import { useDispatch } from 'react-redux';
 
 const ProductEdit = () => {
+
+  const dispatch = useDispatch();
 
   const [name, setName] = useState("");
   const [discription, setDiscription] = useState("");
@@ -21,6 +25,21 @@ const ProductEdit = () => {
   const inputPrice = useCallback((event)=>{
     setPrice(event.target.value)
   }, [setPrice])
+
+
+  // カテゴリー用の連想配列
+  const categories = [
+    {id: 'tops', name: "トップス"},
+    {id: "shirts", name:'シャツ'},
+    {id: 'pants', name: 'パンツ'}
+  ]
+
+  // 性別の連想配列
+     const genders = [
+       { id: "all", name: "すべて" },
+       { id: "male", name: "メンズ" },
+       { id: "female", name: "レディース" },
+     ];
 
 
   return (
@@ -47,6 +66,20 @@ const ProductEdit = () => {
           type={"text"}
           onChange={inputDiscription}
         />
+        {/* <SelectBox
+          label={"カテゴリー"}
+          options={categories}
+          required={true}
+          select={setCategory}
+          value={category}
+        />
+        <SelectBox
+          label={"性別"}
+          options={genders}
+          required={true}
+          select={setGender}
+          value={gender}
+        /> */}
         <TextField
           fullWidth={true}
           label={"価格"}
@@ -56,6 +89,16 @@ const ProductEdit = () => {
           value={price}
           type={"number"}
           onChange={inputPrice}
+        />
+      </div>
+
+      <div className="module-spacer--medium"></div>
+      <div className="center">
+        <PrimaryButton
+          label={"商品を追加"}
+          onClick={() =>
+            dispatch(saveProduct(name, discription, price))
+          }
         />
       </div>
     </section>
