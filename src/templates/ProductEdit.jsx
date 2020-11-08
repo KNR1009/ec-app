@@ -66,7 +66,8 @@ const ProductEdit = () => {
           type={"text"}
           onChange={inputDiscription}
         />
-        {/* <SelectBox
+
+        <SelectBox
           label={"カテゴリー"}
           options={categories}
           required={true}
@@ -79,7 +80,7 @@ const ProductEdit = () => {
           required={true}
           select={setGender}
           value={gender}
-        /> */}
+        />
         <TextField
           fullWidth={true}
           label={"価格"}
@@ -97,7 +98,7 @@ const ProductEdit = () => {
         <PrimaryButton
           label={"商品を追加"}
           onClick={() =>
-            dispatch(saveProduct(name, discription, price))
+            dispatch(saveProduct(name, discription, category, gender, price))
           }
         />
       </div>

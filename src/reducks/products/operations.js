@@ -6,6 +6,8 @@ const productsRef = db.collection("products");
 export const saveProduct = (
   name,
   description,
+  categories,
+  genders,
   price
 ) => {
   return async (dispatch) => {
@@ -14,6 +16,8 @@ export const saveProduct = (
     const data = {
       description: description,
       name: name,
+      categories: categories,
+      genders: genders,
       price: parseInt(price, 10),
       updated_at: timestamp,
     };
