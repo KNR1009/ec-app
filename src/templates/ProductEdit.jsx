@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import { TextField, PrimaryButton, SelectBox } from "../componets/UIkit/index";
 import { saveProduct } from "../reducks/products/operations"
 import { useDispatch } from 'react-redux';
+import { ImageArea } from '../componets/Producuts/index'
 
 const ProductEdit = () => {
 
@@ -46,6 +47,7 @@ const ProductEdit = () => {
     <section>
       <div className="c-section-container">
         <h2 className="u-text__headline u-text__center">商品の登録・編集</h2>
+        <ImageArea />
         <TextField
           fullWidth={true}
           label={"商品名"}
