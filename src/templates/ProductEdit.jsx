@@ -13,6 +13,7 @@ const ProductEdit = () => {
   const [category, setCategory] = useState("");
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
+  const [images, setImages] = useState([])
 
   // onchangeに引き渡すコールバック
   const inputName = useCallback((event)=>{
@@ -47,7 +48,7 @@ const ProductEdit = () => {
     <section>
       <div className="c-section-container">
         <h2 className="u-text__headline u-text__center">商品の登録・編集</h2>
-        <ImageArea />
+        <ImageArea images={images} setImages={setImages}/>
         <TextField
           fullWidth={true}
           label={"商品名"}
