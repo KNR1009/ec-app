@@ -2,38 +2,45 @@ import React, { useCallback } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
 import {storage} from '../../firebase/index'
+import {ImagePreview} from "./index";
 
 const ImageArea = (props) => {
 
-  const uploadImage = useCallback(
-    (event) => {
-      const file = event.target.files;
-      let blob = new Blob(file, { type: "image/jpeg" });
+  const images = props.images;
+  const uploadImage = useCallback((event) => {
 
-      // Generate random 16 digits strings
-      const S =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-      const N = 16;
-      const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N)))
-        .map((n) => S[n % S.length])
-        .join("");
+       
+        const file = event.target.files;
+        let blob = new Blob(file, { type: "image/jpeg" });
 
-      const uploadRef = storage.ref("images").child(fileName);
-      const uploadTask = uploadRef.put(blob);
+        // Generate random 16 digits strings
+        const S="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const N=16;
+        const fileName = Array.from(crypto.getRandomValues(new Uint32Array(N))).map((n)=>S[n%S.length]).join('')
 
-      uploadTask.then(() => {
-        // Handle successful uploads on complete
-        uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          const newImage = { id: fileName, path: downloadURL };
-          props.setImages((prevState) => [...prevState, newImage]);
+        const uploadRef = storage.ref('images').child(fileName);
+        const uploadTask = uploadRef.put(blob);
+
+        uploadTask.then(() => {
+            // Handle successful uploads on complete
+            uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                const newImage = {id: fileName, path: downloadURL};
+                props.setImages((prevState => [...prevState, newImage]))
+                
+            });
+        }).catch(() => {
+            
         });
-      });
-    },
-    [props.setImages]
-  );
+    }, [props.setImages])
 
   return (
-    <div className="u-text-right">
+    <div>
+      <div className="p-grid__list-images">
+          {images.length > 0 && (
+              images.map(image => <ImagePreview id={image.id} path={image.path} key={image.id} /> )
+          )}
+      </div>
+      <div className="u-text-right">
       <span>商品画像を登録する</span>
       <IconButton>
         <label>
@@ -46,6 +53,7 @@ const ImageArea = (props) => {
           />
         </label>
       </IconButton>
+    </div>
     </div>
   );
 }

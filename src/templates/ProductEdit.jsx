@@ -47,7 +47,7 @@ const ProductEdit = () => {
   return (
     <section>
       <div className="c-section-container">
-        <h2 className="u-text__headline u-text__center">商品の登録・編集</h2>
+        <h2 className="u-text__headline u-text-center">商品の登録・編集</h2>
         <ImageArea images={images} setImages={setImages}/>
         <TextField
           fullWidth={true}
