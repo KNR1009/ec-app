@@ -1,15 +1,23 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { TextField, PrimaryButton, SelectBox } from "../componets/UIkit/index";
 import { saveProduct } from "../reducks/products/operations"
 import { useDispatch } from 'react-redux';
 import { ImageArea } from '../componets/Producuts/index'
+import { db } from '../firebase';
+
 
 const ProductEdit = () => {
 
   const dispatch = useDispatch();
 
+  // 商品の編集
+  let id = window.location.pathname.split('/product/edit')[1];
+  if(id !== ""){
+    id = id.split('/')[1]
+  }
+
   const [name, setName] = useState("");
-  const [discription, setDiscription] = useState("");
+  const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
@@ -20,9 +28,9 @@ const ProductEdit = () => {
       setName(event.target.value)
   }, [setName])
 
-  const inputDiscription = useCallback((event)=>{
-    setDiscription(event.target.value)
-  }, [setDiscription])
+  const inputdescription = useCallback((event)=>{
+    setDescription(event.target.value)
+  }, [setDescription])
 
   const inputPrice = useCallback((event)=>{
     setPrice(event.target.value)
@@ -37,11 +45,27 @@ const ProductEdit = () => {
   ]
 
   // 性別の連想配列
-     const genders = [
-       { id: "all", name: "すべて" },
-       { id: "male", name: "メンズ" },
-       { id: "female", name: "レディース" },
-     ];
+  const genders = [
+    { id: "all", name: "すべて" },
+    { id: "male", name: "メンズ" },
+    { id: "female", name: "レディース" },
+  ];
+
+    // idが一致する商品情報をrenderした際に取得
+  useEffect(()=>{
+    if(id !==  ""){
+      db.collection('products').doc(id).get().then(snapshot => {
+         const product = snapshot.data()
+        setName(product.name)
+        setDescription(product.description)
+        setImages(product.images)
+        setCategory(product.category)
+        setGender(product.gender)
+        setPrice(product.price)
+
+      })
+    }
+  }, [])
 
 
   return (
@@ -65,9 +89,9 @@ const ProductEdit = () => {
           multiline={true}
           required={true}
           rows={5}
-          value={discription}
+          value={description}
           type={"text"}
-          onChange={inputDiscription}
+          onChange={inputdescription}
         />
 
         <SelectBox
@@ -101,7 +125,7 @@ const ProductEdit = () => {
         <PrimaryButton
           label={"商品を追加"}
           onClick={() =>
-            dispatch(saveProduct(name, discription, category, gender, price, images))
+            dispatch(saveProduct(id,name, description, category, gender, price, images))
           }
         />
       </div>
