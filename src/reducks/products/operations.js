@@ -8,7 +8,8 @@ export const saveProduct = (
   description,
   categories,
   genders,
-  price
+  price,
+  images
 ) => {
   return async (dispatch) => {
     const timestamp = FirebaseTimestamp.now();
@@ -18,6 +19,7 @@ export const saveProduct = (
       name: name,
       categories: categories,
       genders: genders,
+      images:images,
       price: parseInt(price, 10),
       updated_at: timestamp,
     };

@@ -7,9 +7,23 @@ import {ImagePreview} from "./index";
 const ImageArea = (props) => {
 
   const images = props.images;
-  const uploadImage = useCallback((event) => {
 
-       
+  // 画像を削除するメソット
+
+
+    const deleteImage = useCallback( id => {
+        const ret = window.confirm('この画像を削除しますか？')
+        if (!ret) {
+            return false
+        } else {
+            const newImages = images.filter(image => image.id !== id)
+            props.setImages(newImages);
+            return storage.ref('images').child(id).delete()
+        }
+    }, [images])
+    
+
+  const uploadImage = useCallback((event) => {
         const file = event.target.files;
         let blob = new Blob(file, { type: "image/jpeg" });
 
@@ -37,7 +51,7 @@ const ImageArea = (props) => {
     <div>
       <div className="p-grid__list-images">
           {images.length > 0 && (
-              images.map(image => <ImagePreview id={image.id} path={image.path} key={image.id} /> )
+              images.map(image => <ImagePreview id={image.id} path={image.path} key={image.id} delete={deleteImage}/> )
           )}
       </div>
       <div className="u-text-right">
