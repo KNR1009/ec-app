@@ -72,6 +72,16 @@ const SetSizesArea = (props) => {
         setQuantity(quantity);
   }
 
+  // 削除する際の実装
+  const deleteSize = (deleteIndex) => {
+        const newSizes = props.sizes.filter((item, index) => index !== deleteIndex)
+        props.setSizes(newSizes);
+    }
+
+  // 編集が行われた場合にindexを修正する
+  const memoIndex = useEffect(()=>{
+    setIndex(props.sizes.length);
+  }, [props.sizes.length])
 
   return(
     <div>
@@ -97,7 +107,7 @@ const SetSizesArea = (props) => {
                     </IconButton>
                   </TableCell>
                   <TableCell className={classes.iconCell}>
-                    <IconButton className={classes.iconCell} >
+                    <IconButton className={classes.iconCell} onClick={()=> deleteSize(index)}>
                     <DeleteIcon />
                     </IconButton>
                   </TableCell>

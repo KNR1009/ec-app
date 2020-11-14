@@ -64,7 +64,7 @@ import {SetSizesArea } from '../componets/Producuts/'
         setCategory(product.category)
         setGender(product.gender)
         setPrice(product.price)
-
+        setSizes(product.sizes)
       })
     }
   }, [])
@@ -100,7 +100,7 @@ import {SetSizesArea } from '../componets/Producuts/'
                 <div className="center">
                     <PrimaryButton
                         label={"商品情報を保存"}
-                        onClick={() => dispatch(saveProduct(id, name, description, category, gender, price, sizes, images))}
+                        onClick={() => dispatch(saveProduct(id, name, description, category, gender, price, images, sizes ))}
                     />
                 </div>
             </div>
