@@ -1,12 +1,13 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import { TextField, PrimaryButton, SelectBox } from "../componets/UIkit/index";
+import { TextInput, PrimaryButton, SelectBox } from "../componets/UIkit/index";
 import { saveProduct } from "../reducks/products/operations"
 import { useDispatch } from 'react-redux';
 import { ImageArea } from '../componets/Producuts/index'
 import { db } from '../firebase';
+import {SetSizesArea } from '../componets/Producuts/'
 
 
-const ProductEdit = () => {
+  const ProductEdit = () => {
 
   const dispatch = useDispatch();
 
@@ -22,13 +23,14 @@ const ProductEdit = () => {
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([])
+  const [sizes, setSizes] = useState([])
 
   // onchangeに引き渡すコールバック
   const inputName = useCallback((event)=>{
       setName(event.target.value)
   }, [setName])
 
-  const inputdescription = useCallback((event)=>{
+  const inputDescription = useCallback((event)=>{
     setDescription(event.target.value)
   }, [setDescription])
 
@@ -55,7 +57,7 @@ const ProductEdit = () => {
   useEffect(()=>{
     if(id !==  ""){
       db.collection('products').doc(id).get().then(snapshot => {
-         const product = snapshot.data()
+        const product = snapshot.data()
         setName(product.name)
         setDescription(product.description)
         setImages(product.images)
@@ -70,66 +72,39 @@ const ProductEdit = () => {
 
   return (
     <section>
-      <div className="c-section-container">
-        <h2 className="u-text__headline u-text-center">商品の登録・編集</h2>
-        <ImageArea images={images} setImages={setImages}/>
-        <TextField
-          fullWidth={true}
-          label={"商品名"}
-          multiline={false}
-          required={true}
-          rows={1}
-          value={name}
-          type={"text"}
-          onChange={inputName}
-        />
-        <TextField
-          fullWidth={true}
-          label={"商品説明"}
-          multiline={true}
-          required={true}
-          rows={5}
-          value={description}
-          type={"text"}
-          onChange={inputdescription}
-        />
+            <h2 className="u-text__headline u-text-center">商品の登録・編集</h2>
+            <div className="c-section-container">
+                <ImageArea images={images} setImages={setImages} />
+                <TextInput
+                    fullWidth={true} label={"商品名"} multiline={false} required={true}
+                    onChange={inputName} rows={1} value={name} type={"text"}
+                />
+                <TextInput
+                    fullWidth={true} label={"商品説明"} multiline={true} required={true}
+                    onChange={inputDescription} rows={5} value={description} type={"text"}
+                />
+                <SelectBox
+                    label={"カテゴリー"} options={categories} required={true} select={setCategory} value={category}
+                />
+                <SelectBox
+                    label={"性別"} options={genders} required={true} select={setGender} value={gender}
+                />
+                <TextInput
+                    fullWidth={true} label={"価格"} multiline={false} required={true}
+                    onChange={inputPrice} rows={1} value={price} type={"number"}
+                />
 
-        <SelectBox
-          label={"カテゴリー"}
-          options={categories}
-          required={true}
-          select={setCategory}
-          value={category}
-        />
-        <SelectBox
-          label={"性別"}
-          options={genders}
-          required={true}
-          select={setGender}
-          value={gender}
-        />
-        <TextField
-          fullWidth={true}
-          label={"価格"}
-          multiline={false}
-          required={true}
-          rows={1}
-          value={price}
-          type={"number"}
-          onChange={inputPrice}
-        />
-      </div>
-
-      <div className="module-spacer--medium"></div>
-      <div className="center">
-        <PrimaryButton
-          label={"商品を追加"}
-          onClick={() =>
-            dispatch(saveProduct(id,name, description, category, gender, price, images))
-          }
-        />
-      </div>
-    </section>
+                <div className="module-spacer--small"/>
+                <SetSizesArea sizes={sizes} setSizes={setSizes} />
+                <div className="module-spacer--small" />
+                <div className="center">
+                    <PrimaryButton
+                        label={"商品情報を保存"}
+                        onClick={() => dispatch(saveProduct(id, name, description, category, gender, price, sizes, images))}
+                    />
+                </div>
+            </div>
+        </section>
   );
 }
 export default ProductEdit;

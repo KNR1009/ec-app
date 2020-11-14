@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { TextField, PrimaryButton } from "../componets/UIkit/index";
+import { TextInput, PrimaryButton } from "../componets/UIkit/index";
 import { signIn } from "../reducks/users/operations";
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
@@ -30,7 +30,7 @@ const SignIn = () => {
       <h2 className="u-text-center u-text__headline">ログイン</h2>
       <div className="module-spacer--medium"></div>
 
-      <TextField
+      <TextInput
         fullWidth={true}
         label={"メールアドレス"}
         multiline={false}
@@ -40,7 +40,7 @@ const SignIn = () => {
         type={"email"}
         onChange={inputEmail}
       />
-      <TextField
+      <TextInput
         fullWidth={true}
         label={"パスワード"}
         multiline={false}

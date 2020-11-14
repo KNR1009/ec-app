@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { TextField, PrimaryButton } from "../componets/UIkit/index";
+import { TextInput, PrimaryButton } from "../componets/UIkit/index";
 import { restPassword } from '../reducks/users/operations'
 import { useDispatch } from "react-redux";
 import { push } from "connected-react-router";
@@ -22,7 +22,7 @@ const Rest = () => {
       <h2 className="u-text-center u-text__headline">パスワードを再設定</h2>
       <div className="module-spacer--medium"></div>
 
-      <TextField
+      <TextInput
         fullWidth={true}
         label={"メールアドレス"}
         multiline={false}
