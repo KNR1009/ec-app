@@ -41,9 +41,14 @@ const useStyles = makeStyles((theme) => ({
     media: {
         height:0,
         paddingTop: '100%',
+        // width:'100%',
         cursor:'pointer',
+        // overflow: 'hidden',
         '&:hover': {
         opacity: 0.6,
+        // transition:'1s all',
+        // // transform:'scale(1.1)'  
+        
     }  
         
     },
@@ -98,10 +103,10 @@ const ProductCard = (props) => {
       <CardMedia
         className={classes.media}
         image={images[0].path}
-        onClick={()=>dispatch(push('/product' + props.id))}
+        onClick={()=>dispatch(push('/product/' + props.id))}
       />
       <CardContent className={classes.content}>
-         <div onClick={()=>dispatch(push('/product' + props.id))} className={classes.pointer}>
+         <div onClick={()=>dispatch(push('/product/' + props.id))} className={classes.pointer}>
            <Typography color="textSecondary" component="p">
            {props.name}
          </Typography>  

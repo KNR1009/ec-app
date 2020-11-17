@@ -6,6 +6,8 @@ import { ConnectedRouter } from "connected-react-router";
 import * as History from "history";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {MuiThemeProvider} from '@material-ui/core/styles';
+import {theme} from './assets/theme'
 
 // ヒスロリーを取得して変数へ格納
 const history = History.createBrowserHistory();
@@ -15,7 +17,9 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <ConnectedRouter history={history}>
+        <MuiThemeProvider theme={theme}>
         <App />
+        </MuiThemeProvider>
       </ConnectedRouter>
     </Provider>
   </React.StrictMode>,
