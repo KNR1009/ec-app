@@ -1,4 +1,4 @@
-import React from 'react'
+import React , { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
@@ -7,6 +7,10 @@ import Typography from '@material-ui/core/Typography';
 import NoImage from '../../assets/img/src/no_image.png'
 import {useDispatch} from 'react-redux';
 import {push} from 'connected-react-router'
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
 
 // スタイルと整える
@@ -76,6 +80,18 @@ const ProductCard = (props) => {
   const classes = useStyles();
 
 
+  // メニューの開閉状態
+   const [anchorEl, setAnchorEl] = React.useState(null);
+   const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+   const handleClose = () => {
+        setAnchorEl(null);
+    };
+
+
+
   return(
     <Card className={classes.root}>
       <CardMedia
@@ -92,6 +108,22 @@ const ProductCard = (props) => {
            ¥{price}
          </Typography>  
          </div>
+         <IconButton onClick={handleClick}>
+             <MoreVertIcon />
+         </IconButton>
+         <Menu
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+         >
+           <MenuItem onClick={()=>{dispatch(push("/product/edit/" + props.id))}}>
+             編集する
+           </MenuItem>
+           <MenuItem>
+             削除する
+           </MenuItem>
+        </Menu>
       </CardContent >
     </Card>
   )
