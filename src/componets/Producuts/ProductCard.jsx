@@ -5,6 +5,9 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import NoImage from '../../assets/img/src/no_image.png'
+import {useDispatch} from 'react-redux';
+import {push} from 'connected-react-router'
+
 
 // スタイルと整える
 const useStyles = makeStyles((theme) => ({
@@ -24,15 +27,23 @@ const useStyles = makeStyles((theme) => ({
         textAlign: 'left',
         '&:last-child': {
             paddingBottom: 16
-        }
+        }    
     },
     icon: {
         marginRight: 0,
         marginLeft: 'auto'
     },
     media: {
-        height: 0,
-        paddingTop: '100%'
+        height:0,
+        paddingTop: '100%',
+        cursor:'pointer',
+        '&:hover': {
+        opacity: 0.6,
+    }  
+        
+    },
+    pointer:{
+      cursor:'pointer',
     },
     price: {
         color: theme.palette.secondary.dark,
@@ -58,9 +69,10 @@ const useStyles = makeStyles((theme) => ({
 
 const ProductCard = (props) => {
   const price = props.price.toLocaleString();
+  const dispatch = useDispatch();
 
   // 画像の取得
-   const images = (props.images.length > 0) ? props.images : [NoImage]
+  const images = (props.images.length > 0) ? props.images : [NoImage]
   const classes = useStyles();
 
 
@@ -69,14 +81,17 @@ const ProductCard = (props) => {
       <CardMedia
         className={classes.media}
         image={images[0].path}
+        onClick={()=>dispatch(push('/product' + props.id))}
       />
       <CardContent className={classes.content}>
-         <Typography color="textSecondary" component="p">
+         <div onClick={()=>dispatch(push('/product' + props.id))} className={classes.pointer}>
+           <Typography color="textSecondary" component="p">
            {props.name}
          </Typography>  
          <Typography component="p" className={classes.price}>
            ¥{price}
          </Typography>  
+         </div>
       </CardContent >
     </Card>
   )
