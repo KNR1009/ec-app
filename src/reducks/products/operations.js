@@ -1,8 +1,20 @@
 import { db, FirebaseTimestamp } from "../../firebase/index";
 import { push } from "connected-react-router";
-import {fetchProductsAction} from "./actions"
+import {fetchProductsAction, deleteProductsAction} from "./actions"
 
 const productsRef = db.collection("products");
+
+// 商品を削除するメソット
+export const deleteProduct = (id)=>{
+  return async(dispatch, getState) => {
+      productsRef.doc(id).delete()
+      .then(()=>{
+          const prevState = getState().products.list;
+         const nextProducts = prevState.filter(product => product.id !== id)
+          dispatch(deleteProductsAction(nextProducts))
+      })
+  }
+}
 
 // firebaseから商品情報を取得
 export const fetchProducts = () => {

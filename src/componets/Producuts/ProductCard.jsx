@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
+import {deleteProduct} from '../../reducks/products/operations'
 
 
 // スタイルと整える
@@ -117,10 +118,16 @@ const ProductCard = (props) => {
             open={Boolean(anchorEl)}
             onClose={handleClose}
          >
-           <MenuItem onClick={()=>{dispatch(push("/product/edit/" + props.id))}}>
+           <MenuItem onClick={()=>{dispatch(push("/product/edit/" + props.id)) 
+          handleClose()
+          }}>
              編集する
            </MenuItem>
-           <MenuItem>
+           <MenuItem 
+           onClick={()=>{
+             dispatch(deleteProduct(props.id))
+             handleClose()
+           }}> 
              削除する
            </MenuItem>
         </Menu>
