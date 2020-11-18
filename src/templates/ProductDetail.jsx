@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { db } from '../firebase';
 import HTMLReactParser from 'html-react-parser'
+import ImageSwiper from '../componets/Producuts/ImageSwiper'
 
 const useStyles = makeStyles((theme) => ({
     sliderBox: {
@@ -36,7 +37,6 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 // 改行用のメソットを作成する
-
 const returnCodeToBr = (text) => {
   if(text==""){
     return text
@@ -46,9 +46,6 @@ const returnCodeToBr = (text) => {
 }
 
 const ProductDetail = ()=>{
-    // const selector = useSelector(state => state)
-    // const path = selector.router.location.pathname
-    // const id = path.split('/product/')[1]
 
     const classes = useStyles()
     let id = window.location.pathname.split('/product/')[1];
@@ -61,25 +58,25 @@ const ProductDetail = ()=>{
         })
     },[])
 
-    
     return(
       <section className="c-section-wrapin">
-        {product && (
-            <div className="p-gird__row">
-              <div className={classes.sliderBox}>
-                    
-              </div>
-              <div className={classes.detail}>
-                <h2 className="u-text__headline">{product.name}</h2>
-                <p className={classes.price}>¥{(product.price).toLocaleString()}</p>
-                <div className="module-spacer--small"/>
-                 <p>{returnCodeToBr(product.description)}</p>
-                <div className="module-spacer--small"/>
-              
-            </div>
-            </div>
-        )}
-      </section>
+            {product && (
+                <div className="p-grid__row">
+                    <div className={classes.sliderBox}>
+                        <ImageSwiper 
+                          images={product.images}
+                        />
+                    </div>
+                    <div className={classes.detail}>
+                        <h2 className="u-text__headline">{product.name}</h2>
+                        <p className={classes.price}>¥{(product.price).toLocaleString()}</p>
+                        <div className="module-spacer--small"/>
+                        <div className="module-spacer--small"/>
+                        <p>{returnCodeToBr(product.description)}</p>
+                    </div>
+                </div>
+            )}
+        </section>
     )
 }
 
