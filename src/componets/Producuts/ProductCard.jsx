@@ -30,14 +30,15 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         padding: '16 8',
         textAlign: 'left',
+        justifyContent: 'space-between',
         '&:last-child': {
             paddingBottom: 16
         }    
     },
-    icon: {
-        marginRight: 0,
-        marginLeft: 'auto'
-    },
+    // icon: {
+    //     marginRight: 0,
+    //     marginLeft: 'auto'
+    // },
     media: {
         height:0,
         paddingTop: '100%',
