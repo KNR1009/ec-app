@@ -2,12 +2,16 @@ import React from 'react'
 import Router from './Router'
 import "./assets/reset.css"
 import "./assets/style.css"
+import {Header} from './componets/header'
 
 const App = ()=>{
     return(
-      <main>
+      <>
+       <Header />
+       <main className="c-main">
         <Router />
-      </main>
+       </main>
+      </>
     )
 }
 export default App;
