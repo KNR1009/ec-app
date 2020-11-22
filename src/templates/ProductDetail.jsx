@@ -1,8 +1,10 @@
 import { makeStyles } from '@material-ui/styles';
-import React, { useEffect, useState } from 'react'
-import { db } from '../firebase';
+import React, { useCallback, useEffect, useState } from 'react'
+import { db, FirebaseTimestamp } from '../firebase';
 import HTMLReactParser from 'html-react-parser'
 import {ImageSwiper, SizeTable} from '../componets/Producuts'
+import { useDispatch } from 'react-redux';
+import { addProductToCart } from '../reducks/users/operations'
 
 const useStyles = makeStyles((theme) => ({
     sliderBox: {
@@ -47,6 +49,7 @@ const returnCodeToBr = (text) => {
 const ProductDetail = ()=>{
 
     const classes = useStyles()
+    const dispatch = useDispatch()
     let id = window.location.pathname.split('/product/')[1];
     const [product, setProduct] = useState(null);
 
@@ -56,6 +59,22 @@ const ProductDetail = ()=>{
             setProduct(data)
         })
     },[])
+
+    // カートに商品を追加する処理
+    const addProduct = useCallback((selectedSize) => {
+        const timestamp = FirebaseTimestamp.now()
+        dispatch(addProductToCart({
+            added_at: timestamp,
+            description: product.description,
+            gender: product.gender,
+            images: product.images,
+            name: product.name,
+            price: product.price,
+            productId: product.id,
+            quantity: 1,
+            size: selectedSize
+        }))
+    }, [product])
 
 
     return(
@@ -71,7 +90,7 @@ const ProductDetail = ()=>{
                         <h2 className="u-text__headline">{product.name}</h2>
                         <p className={classes.price}>¥{(product.price).toLocaleString()}</p>
                         <div className="module-spacer--small"/>
-                        <SizeTable sizes={product.sizes}/>
+                        <SizeTable sizes={product.sizes} addProduct={addProduct}/>
                         <div className="module-spacer--small"/>
                         <p>{returnCodeToBr(product.description)}</p>
                     </div>

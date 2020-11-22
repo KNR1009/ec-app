@@ -62,54 +62,54 @@ const CloseableDrawer = (props) => {
     ];
 
 
-    return(
-      <nav className="classes drawer">
-         <Drawer
-                container={container}
-                variant="temporary"
-                anchor={"right"}
-                open={props.open}
-                onClose={(e) => props.onClose(e, false)}
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-                ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                }}
+return(
+<nav className="classes drawer">
+    <Drawer
+        container={container}
+        variant="temporary"
+        anchor={"right"}
+        open={props.open}
+        onClose={(e) => props.onClose(e, false)}
+        classes={{
+            paper: classes.drawerPaper,
+        }}
+        ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+        }}
+    >
+<div>
+    <div className={classes.searchField}>
+        <TextInput
+            fullWidth={false} label={"キーワードを入力"} multiline={false}
+            onChange={inputSearchKeyword} required={false} rows={1} value={searchKeyword} type={"text"}
+        />
+        <IconButton>
+            <SearchIcon />
+        </IconButton>
+    </div>
+        <Divider />
+        <List>
+        {menus.map(menu=>(
+            <ListItem button key={menu.id} onClick={(e)=>{menu.func(e, menu.value)}}
             >
-        <div>
-          <div className={classes.searchField}>
-              <TextInput
-                  fullWidth={false} label={"キーワードを入力"} multiline={false}
-                  onChange={inputSearchKeyword} required={false} rows={1} value={searchKeyword} type={"text"}
-              />
-              <IconButton>
-                  <SearchIcon />
-              </IconButton>
-          </div>
-              <Divider />
-              <List>
-                {menus.map(menu=>(
-                    <ListItem button key={menu.id} onClick={(e)=>{menu.func(e, menu.value)}}
-                    >
-                        <ListItemIcon>
-                            {menu.icon}
-                        </ListItemIcon>
-                         <ListItemText primary={menu.label}/>
-                    </ListItem>
-                ))}
-                <ListItem button key="logout" onClick={()=>dispatch(signOut())}>
-                  <ListItemIcon>
-                    <ExitToAppIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"ログアウト"}/>
-                </ListItem>
-              </List>
-          
-        </div>
-       </Drawer>
-      </nav>
-    )
+                <ListItemIcon>
+                    {menu.icon}
+                </ListItemIcon>
+                    <ListItemText primary={menu.label}/>
+            </ListItem>
+        ))}
+        <ListItem button key="logout" onClick={()=>dispatch(signOut())}>
+            <ListItemIcon>
+            <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary={"ログアウト"}/>
+        </ListItem>
+        </List>
+    
+</div>
+</Drawer>
+</nav>
+)
 }
 
 export default CloseableDrawer
