@@ -60,7 +60,7 @@ const ProductDetail = ()=>{
         })
     },[])
 
-    // カートに商品を追加する処理
+    // カートに商品を追加する処理(stateの値から取得)
     const addProduct = useCallback((selectedSize) => {
         const timestamp = FirebaseTimestamp.now()
         dispatch(addProductToCart({

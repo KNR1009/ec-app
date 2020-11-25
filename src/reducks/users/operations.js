@@ -1,4 +1,4 @@
-import {signInAction} from "./actions";
+import {signInAction, fetchProductsInCartAction} from "./actions";
 import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
@@ -14,6 +14,12 @@ export const addProductToCart = (addedProduct) => {
         await cartRef.set(addedProduct);
         dispatch(push('/'))
     }
+}
+
+export const fetchProductsInCart = (products) => {
+  return async(dispatch) => {
+    dispatch(fetchProductsInCartAction(products))
+  }
 }
 
 
