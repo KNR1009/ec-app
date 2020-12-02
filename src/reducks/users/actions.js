@@ -1,6 +1,15 @@
+// 注文履歴を保存する¥
+export const FETCH_ORDER_HISTORY = "FETCH_ORDER_HISTORY";
+export const fetchOrderHistoryAction = (history) => {
+    return {
+        type: "FETCH_ORDER_HISTORY",
+        payload: history
+    }
+}
+
+
+
 // カートの変更をこちらに記載する
-
-
 export const FETCH_PRODUCTS_IN_CART = "FETCH_PRODUCTS_IN_CART";
 export const fetchProductsInCartAction = (products) => {
     return {

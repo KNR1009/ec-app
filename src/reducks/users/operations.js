@@ -1,11 +1,11 @@
-import {signInAction, fetchProductsInCartAction} from "./actions";
+import {signInAction, fetchProductsInCartAction, fetchOrderHistoryAction} from "./actions";
 import {push} from 'connected-react-router';
 import {auth, FirebaseTimestamp ,db} from '../../firebase/index'
 import { useDispatch } from "react-redux";
 
 
-// カートに追加するオペレーションを作成する
 
+// カートに追加するオペレーションを作成する
 export const addProductToCart = (addedProduct) => {
     return async (dispatch, getState) => {
         const uid = getState().users.uid;
@@ -23,6 +23,26 @@ export const fetchProductsInCart = (products) => {
 }
 
 
+// 注文履歴を取得するオペレーション
+export const fetchOrderHistory = () => {
+  return async(dispatch, getState) => {
+      // 現在のログインユーザーの取得
+      const uid = getState().users.uid;
+      const list = []
+      // firebaseへアクセスして注文履歴の取得
+      db.collection('users').doc(uid)
+      .collection('orders')
+      .orderBy('updated_at', 'desc')
+      .get()
+      .then((snapshots) => {
+        snapshots.forEach(snapshot => {
+          const data = snapshot.data()
+          list.push(data)
+        })
+        dispatch(fetchOrderHistoryAction(list))
+      })
+  }
+}
 
 // 認証リッスン
 export const listenAuthState = () =>{
