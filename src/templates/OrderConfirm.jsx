@@ -8,6 +8,8 @@ import {push} from 'connected-react-router'
 import {makeStyles} from "@material-ui/core/styles";
 import { TextDetail } from '../componets/UIkit/index'
 import Divider from '@material-ui/core/Divider';
+import { orderProduct } from '../reducks/products/operations'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +39,7 @@ const OrderConfirm = () => {
 
   // スタイルの定義
   const classes = useStyles()
+  const dispatch = useDispatch()
 
   // storeのstateの商品情報の取得
   const selector = useSelector((state)=> state);
@@ -47,12 +50,18 @@ const OrderConfirm = () => {
       return productsInCart.reduce((sum, product) => sum += product.price, 0)
   }, [productsInCart])
 
-  // 送料の設定
+  // 送料の設定(1万円以上は無料)
   const shippingFee = (subtotal >= 10000) ? 0 : 210;
 
   // 税金
-  const tax = (subtotal + shippingFee ) * 0.1
+  const tax = (subtotal) * 0.1
   const total = subtotal + shippingFee + tax
+
+
+  // 注文ボタンがクリックされた際に呼び出される
+  const order = useCallback(()=>{
+    dispatch(orderProduct(productsInCart, total))
+  }, [productsInCart, total])
 
   return(
     <section className="c-section-wrapin">
@@ -69,11 +78,12 @@ const OrderConfirm = () => {
           </List>
         </div>
         <div className={classes.orderBox}>
-          <TextDetail label={'商品合計'} value={subtotal}/>
-          <TextDetail label={'送料'} value={shippingFee}/>
-          <TextDetail label={'消費税'} value={tax}/>
+          <TextDetail label={'商品合計'} value={'¥' + subtotal.toLocaleString() + '円'}/>
+          <TextDetail label={'消費税' + '円'} value={'¥' + tax+ '円'}/>
+          <TextDetail label={'送料'} value={'¥' + shippingFee + '円'}/>
           < Divider />
-          <TextDetail label={'合計(税込み)'} value={'¥' + total}/>
+          <TextDetail label={'合計(税込み)'} value={'¥' + total.toLocaleString()+ '円'}/>
+          <PrimaryButton label={"注文を確定"}   onClick={()=>order()}/>
         </div>
       </div>
     </section>
