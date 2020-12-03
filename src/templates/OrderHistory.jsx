@@ -4,6 +4,7 @@ import List from "@material-ui/core/List";
 import {makeStyles} from "@material-ui/styles";
 import { getOrderHistory } from '../reducks/users/selectors'
 import { fetchOrderHistory } from '../reducks/users/operations'
+import { OrderHistoryItem } from '../componets/Producuts'
 
 const useStyles = makeStyles((theme) => ({
     orderList: {
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const OrderHistory = () => {
     const classes = useStyles()
     const selector = useSelector((state) => state);
-    const getOrder = getOrderHistory(selector)
+    const orders = getOrderHistory(selector)
     const dispatch = useDispatch()
 
     // 注文履歴取得のメソット
@@ -30,15 +31,14 @@ const OrderHistory = () => {
         dispatch(fetchOrderHistory())
     }, [])
 
-    console.log(getOrder)
-
     return(
-      <>
-        <section className="c-section-wrapin">
-          <List className={classes.orderList}>
-          </List>
-        </section>
-      </>
+    <section className="c-section-wrapin">
+            <List className={classes.orderList}>
+                {orders.length > 0 && (
+                    orders.map(order => <OrderHistoryItem order={order} key={order.id} />)
+                )}
+            </List>
+    </section>
     )
 }
 
