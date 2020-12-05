@@ -25,6 +25,7 @@ const OrderHistory = () => {
     const selector = useSelector((state) => state);
     const orders = getOrderHistory(selector)
     const dispatch = useDispatch()
+  
 
     // 注文履歴取得のメソット
     useEffect(()=>{
