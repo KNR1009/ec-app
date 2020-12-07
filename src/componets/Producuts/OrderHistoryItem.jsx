@@ -32,7 +32,7 @@ const datetimeTostring = (dt) => {
         <TextDetail label={'発送日'} value={shipping}></TextDetail>
         <TextDetail label={'注文合計'} value={total}></TextDetail>
          {Object.keys(products).length > 0 && (
-            <OrderProducts products={products} />
+            <OrderProducts products={products}/>
             )}
         <div className="module-spacer--extra-extra-small" />
         <Divider />

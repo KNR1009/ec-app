@@ -20,6 +20,7 @@ import {SetSizesArea } from '../componets/Producuts/'
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
+  const [categories, setCategories] = useState([]);
   const [gender, setGender] = useState("");
   const [price, setPrice] = useState("");
   const [images, setImages] = useState([])
@@ -40,11 +41,11 @@ import {SetSizesArea } from '../componets/Producuts/'
 
 
   // カテゴリー用の連想配列
-  const categories = [
-    {id: 'tops', name: "トップス"},
-    {id: "shirts", name:'シャツ'},
-    {id: 'pants', name: 'パンツ'}
-  ]
+  // const categories = [
+  //   {id: 'tops', name: "トップス"},
+  //   {id: "shirts", name:'シャツ'},
+  //   {id: 'pants', name: 'パンツ'}
+  // ]
 
   // 性別の連想配列
   const genders = [
@@ -68,6 +69,24 @@ import {SetSizesArea } from '../componets/Producuts/'
       })
     }
   }, [])
+
+  // カテゴリー一覧をfirebaseより取得
+  useEffect(()=>{
+    db.collection('categories')
+    .orderBy('order', 'asc')
+    .get()
+    .then((snapshots)=>{
+      const list = [];
+      snapshots.forEach(snapshot => {
+        const data = snapshot.data();
+        list.push({
+          id: data.id,
+          name: data.name
+        })
+      })
+      setCategories(list)
+    })
+  },[])
 
 
   return (
