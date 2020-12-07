@@ -19,10 +19,16 @@ export const deleteProduct = (id)=>{
 }
 
 // firebaseから商品情報を取得
-export const fetchProducts = () => {
+export const fetchProducts = (gender, category) => {
   
   return async(dispatch) => {
-      productsRef.orderBy('updated_at', 'desc').get().then(snapshots => {
+
+      let query = productsRef.orderBy('updated_at', 'desc');
+        query = (gender !== "") ? query.where('gender', '==', gender) : query;
+        query = (category !== "") ? query.where('category', '==', category) : query;
+
+
+      query.get().then(snapshots => {
           const productList = []
           snapshots.forEach(snapshot => {
             const product = snapshot.data();
