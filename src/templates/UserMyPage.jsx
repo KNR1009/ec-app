@@ -15,9 +15,9 @@ const UserMyPage = () => {
       <TextDetail label={"ユーザー名"} value={username}/>
       <div className="module-spacer--small" />
        <div className="u-text-center">
-          <PrimaryButton label={"カート情報の編集"}/> 
+          <PrimaryButton label={"カード情報の編集"} onClick={()=>{dispatch(push('/user/payment/edit'))}}/> 
           <div className="module-spacer--small" />
-          <GreyButton label={"注文履歴の確認"}/> 
+          <GreyButton label={"注文履歴の確認"} onClick={()=>{dispatch(push('/order/history'))}}/> 
        </div>
     </section>
   )
