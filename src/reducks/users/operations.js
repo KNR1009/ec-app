@@ -62,7 +62,6 @@ export const listenAuthState = () =>{
             // 以下でアクションを呼び出しsiginの処理を行う
             dispatch(
               signInAction({
-                email: data.email,
                 isSignedIn: true,
                 role: data.role,
                 uid: uid,
@@ -104,7 +103,6 @@ export const signIn = (email, password) => {
             // 以下でアクションを呼び出しsiginの処理を行う
             dispatch(
               signInAction({
-                email: data.email,
                 isSignedIn: true,
                 role: data.role,
                 uid: uid,
