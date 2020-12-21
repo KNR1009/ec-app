@@ -13,6 +13,11 @@ export const UserReducer = (state=initialState.users, action) => {
         ...state,
         ...action.payload
       };
+    case Actions.UPDARE_USER_STATE:
+      return{
+        ...state,
+        ...action.payload
+      };
     case Actions.SIGN_OUT:
       return {
         ...action.payload

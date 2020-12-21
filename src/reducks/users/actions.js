@@ -27,6 +27,7 @@ export const signInAction = (userState) => {
       role: userState.role,
       uid: userState.uid,
       username: userState.username,
+      email: userState.email
     },
   };
 };
@@ -41,5 +42,14 @@ export const signOutAction = () => {
       uid: "",
       username: "",
     },
+  };
+};
+
+// クレジットカード情報の変更
+export const UPDARE_USER_STATE = "UPDARE_USER_STATE";
+export const updateUserStateAction = (userState) => {
+  return {
+    type: "UPDARE_USER_STATE",
+    payload: userState
   };
 };

@@ -11,6 +11,10 @@
       "**/node_modules/**"
     ],
     "rewrites": [
+        {
+        "source": "/v1/customer",
+        "function": "stripeCustomer"
+      },
       {
         "source": "**",
         "destination": "/index.html"
