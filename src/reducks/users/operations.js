@@ -63,6 +63,7 @@ export const listenAuthState = () =>{
             dispatch(
               signInAction({
                 customer_id: (data.customer_id) ? data.customer_id : "",
+                payment_method_id: (data.payment_method_id) ? data.payment_method_id : "",
                 email: data.email,
                 isSignedIn: true,
                 role: data.role,
@@ -106,6 +107,7 @@ export const signIn = (email, password) => {
             dispatch(
               signInAction({
                 customer_id: (data.customer_id) ? data.customer_id : "",
+                payment_method_id: (data.payment_method_id) ? data.payment_method_id : "",
                 email: data.email,
                 isSignedIn: true,
                 role: data.role,

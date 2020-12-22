@@ -1,11 +1,11 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {PrimaryButton, TextDetail, GreyButton} from "../UIkit/index";
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router'
 import { registerCard } from '../../reducks/payments/operations'
 
-import { getUserId, getUsername} from "../../reducks/users/selectors";
+import { getCustomerId, getPaymentMethodId, getUserId} from "../../reducks/users/selectors";
 
 
 const PaymentEdit = () => {
@@ -13,9 +13,19 @@ const PaymentEdit = () => {
   const stripe = useStripe();
   const elements = useElements();
   const selector = useSelector(state => state);
-  const uid = getUserId(selector)
-  const username = getUsername(selector);
+  const customerId = getCustomerId(selector);
+  const paymentmethodId = getPaymentMethodId(selector);
+
   
+
+  // 登録カード情報を格納するstate
+  const [card, setState] = useState({});
+  
+  useEffect(()=>{
+    console.log(customerId);
+    console.log(paymentmethodId);
+  
+  },[])
 
   // カード情報を登録するメソット
   const register = useCallback(() => {
@@ -28,6 +38,9 @@ const PaymentEdit = () => {
         クレジットカード情報の登録・編集
       </h2>
       <div className="module-spacer--medium"></div>
+      <h3>現在登録されているカード情報</h3>
+      <div className="module-spacer--medium"></div>
+      <TextDetail />
       <CardElement
             options={{
               style: {

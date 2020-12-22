@@ -27,7 +27,9 @@ export const signInAction = (userState) => {
       role: userState.role,
       uid: userState.uid,
       username: userState.username,
-      email: userState.email
+      email: userState.email,
+      payment_method_id: userState.payment_method_id,
+      customer_id: userState.customer_id
     },
   };
 };

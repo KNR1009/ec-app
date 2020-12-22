@@ -8,6 +8,8 @@ const initialState = {
     cart: [],
     email:"",
     isSignedIn: false,
+    customer_id: "",
+    payment_method_id: "",
     orders:[],
     role: "",
     uid: "",

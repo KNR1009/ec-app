@@ -23,6 +23,7 @@ const createCustomer = async (email, paymentMethodId, uid) => {
     });
 
     const customerResponse = await response.json();
+    // firebaseに保存するために返り値を保存する
     return JSON.parse(customerResponse.body);
 }
 
@@ -62,7 +63,6 @@ export const registerCard = (stripe, elements) => {
 
     // paymentメソットをトークン化したidを以下で取得する
     const paymentMethodId = paymentMethod?.id;
-    console.log(email, paymentMethodId, uid)
     
     // APIを叩くメソットを呼び出す(メソットはreturnでJSON.parse(customerResponse.bodyを返していたので以下の変数に格納)
    const customerData = await createCustomer(email, paymentMethodId, uid);

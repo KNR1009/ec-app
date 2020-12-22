@@ -35,3 +35,24 @@ exports.stripeCustomer = functions.https.onRequest((req, res) => {
             })
         })   
 })
+
+// 登録したカード情報を取得するAPI
+exports.retrievePaymentMethod= functions.https.onRequest((req, res) => {
+    // corsの利用(別のドメインを超えて処理ができるようになる)
+    const corsHandler = cors({origin: true});
+
+    corsHandler(req, res, ()=>{
+        // POSTメソットかの判定
+        if(req.method !== 'POST'){
+            sendResponse(res, 405, {error: 'POSTメソットで送ってください'})}
+        // POSTが叩かれた場合の処理を以下に記述
+
+        return stripe.paymentMethod.retrieve(
+            req.body.paymentMethodId
+        ).then((paymentMethod) => {
+                sendResponse(res, 200, paymentMethod)
+            }).catch((error)=>{
+                sendResponse(res, 500, {error: error})
+            })
+        })   
+})
