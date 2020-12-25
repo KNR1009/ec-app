@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useMemo} from 'react'
 import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {PrimaryButton, TextDetail, GreyButton} from "../UIkit/index";
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,19 +21,31 @@ const PaymentEdit = () => {
 
   // カード情報を登録するメソット
   const register = useCallback(() => {
-      dispatch(registerCard(stripe, elements))
-  }, [stripe, elements])
+      dispatch(registerCard(stripe, elements, customerId ))
+  }, [stripe, elements, customerId])
 
 
+  // カード情報を取得
    useEffect(() => {
         (async() => {
+            // APIを叩くメソットを呼び出している
             const cardData = await retrievePaymentMethod(paymentMethodId)
             if (cardData) {
-                console.log(cardData);
+                // card情報をstateに格納する
                 setCard(cardData)
             }
         })()
     },[paymentMethodId]);
+
+    const cardNumber = useMemo(()=>{
+      if(card.last4){
+        // カード情報の下4桁を表示
+
+         return  "**** **** ****" + " " + card.last4
+      }else{
+        return "未登録"
+      }
+    })
   
   return(
     <section className="c-section-container">
@@ -43,7 +55,7 @@ const PaymentEdit = () => {
       <div className="module-spacer--medium"></div>
       <h3>現在登録されているカード情報</h3>
       <div className="module-spacer--medium"></div>
-      <TextDetail />
+      <TextDetail label={card.brand} value={cardNumber}/>
       <CardElement
             options={{
               style: {

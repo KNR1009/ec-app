@@ -56,3 +56,29 @@ exports.retrievePaymentMethod= functions.https.onRequest((req, res) => {
             })
         })   
 })
+
+// 登録情報を編集する
+exports.updatePaymentMethod= functions.https.onRequest((req, res) => {
+    // corsの利用(別のドメインを超えて処理ができるようになる)
+    const corsHandler = cors({origin: true});
+
+    corsHandler(req, res, ()=>{
+        // POSTメソットかの判定
+        if(req.method !== 'POST'){
+            sendResponse(res, 405, {error: 'POSTメソットで送ってください'})}
+
+            // 既存データ削除API
+        return stripe.paymentMethods.detach(
+            req.body.prevPaymentMethodId
+        ).then( ()=>{
+            stripe.paymentMethods.attach(
+                req.body.nextPaymentMethodId,
+                {customer: req.body.customerId}
+            ).then((nextPaymentMethodId)=>{
+                sendResponse(res, 200, nextPaymentMethodId)
+            }).catch((error)=>{
+                sendResponse(res, 500, {error: error})
+            })
+        })
+        })   
+})
