@@ -21,7 +21,7 @@ const PaymentEdit = () => {
 
   // カード情報を登録するメソット
   const register = useCallback(() => {
-      dispatch(registerCard(stripe, elements, customerId ))
+      dispatch(registerCard(stripe, elements, customerId))
   }, [stripe, elements, customerId])
 
 

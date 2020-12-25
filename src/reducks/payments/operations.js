@@ -10,6 +10,10 @@ const headers = new Headers();
 headers.set('Content-type', 'application/json');
 const BASE_URL = "https://ec-app-8ba0b.web.app"
 
+
+
+
+
 // 新規登録を叩く
 const createCustomer = async (email, paymentMethodId, uid) => {
     const response = await fetch(BASE_URL + '/v1/customer', {
@@ -43,7 +47,8 @@ export const retrievePaymentMethod = async (paymentMethodId) => {
 }
 
 
-export const registerCard = (stripe, elements) => {
+
+export const registerCard = (stripe, elements, customerId) => {
   return async (dispatch, getState)=> {
     // ログインユーザーの情報を取得する
     const user = getState().users;
@@ -79,27 +84,70 @@ export const registerCard = (stripe, elements) => {
     // paymentメソットをトークン化したidを以下で取得する
     const paymentMethodId = paymentMethod?.id;
     
-    // APIを叩くメソットを呼び出す(メソットはreturnでJSON.parse(customerResponse.bodyを返していたので以下の変数に格納)
-   const customerData = await createCustomer(email, paymentMethodId, uid);
-
-    // 処理がうまくいっているのかの確認を行う
-    if(customerData.id === ""){
-      alert('カード情報の登録に失敗しました')
-      return;
+    if(customerId === ""){
+     
+    const customerData = await createCustomer(email, paymentMethodId, uid);
+     // 処理がうまくいっているのかの確認を行う
+      if(customerData.id === ""){
+        alert('カード情報の登録に失敗しました')
+        return;
+      }else{
+        const updateUserState = {
+            customer_id: customerData.id,
+            payment_method_id: paymentMethodId
+        }
+        db.collection('users').doc(uid)
+          .update(updateUserState)
+          .then(()=>{
+            dispatch(updateUserStateAction(updateUserState))
+            dispatch(push('/user/mypage'))
+          }).catch((error)=>{
+            // stripe側には顧客情報が保存されている
+            alert('firebaseでの登録に失敗しました')
+            return;
+          })
+        }
     }else{
-       const updateUserState = {
-          customer_id: customerData.id,
+      // 既存情報を更新する
+      // 既存のidを取得する
+      const prevPaymentMethodId = getState().users.payment_method_id;
+      const updatedPaymentMethod = await updatePaymentMethod(customerId, prevPaymentMethodId, paymentMethodId);
+      
+
+      if(!updatedPaymentMethod){
+        alert('お客様情報の登録に失敗しました')
+      }else{
+        // 新しくfirebaseへ保存する
+        const userState = {
           payment_method_id: paymentMethodId
-      }
-      db.collection('users').doc(uid)
-        .update(updateUserState)
+        }
+        db.collection('users').doc(uid)
+        .update(userState)
         .then(()=>{
-          dispatch(updateUserStateAction(updateUserState))
+          dispatch(updateUserStateAction(userState))
+          alert('お客様情報を更新しました');
           dispatch(push('/user/mypage'))
-        }).catch((error)=>{
-          // stripe側には顧客情報が保存されている
-          alert('firebaseでの登録に失敗しました')
+        }).catch(()=>{
+          alert('失敗しました');
         })
       }
+    }
   }
+}
+
+// ユーザー情報を更新するAPIを叩くメソット
+export const updatePaymentMethod = async (customerId, prevPaymentMethodId, nextPaymentMethodId) => {
+    const response = await fetch(BASE_URL + '/v1/updatePaymentMethod', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+            customerId: customerId,
+            prevPaymentMethodId: prevPaymentMethodId,
+            nextPaymentMethodId: nextPaymentMethodId,
+        })
+    });
+
+    const paymentMethodResponse = await response.json();
+    const paymentMethod = JSON.parse(paymentMethodResponse.body);
+    return paymentMethod.card
 }

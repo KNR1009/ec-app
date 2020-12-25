@@ -70,7 +70,7 @@ exports.updatePaymentMethod= functions.https.onRequest((req, res) => {
             // 既存データ削除API
         return stripe.paymentMethods.detach(
             req.body.prevPaymentMethodId
-        ).then( ()=>{
+        ).then(()=>{
             stripe.paymentMethods.attach(
                 req.body.nextPaymentMethodId,
                 {customer: req.body.customerId}
