@@ -47,7 +47,7 @@ exports.retrievePaymentMethod= functions.https.onRequest((req, res) => {
             sendResponse(res, 405, {error: 'POSTメソットで送ってください'})}
         // POSTが叩かれた場合の処理を以下に記述
 
-        return stripe.paymentMethod.retrieve(
+        return stripe.paymentMethods.retrieve(
             req.body.paymentMethodId
         ).then((paymentMethod) => {
                 sendResponse(res, 200, paymentMethod)

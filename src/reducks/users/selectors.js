@@ -12,7 +12,6 @@ export const getCustomerId = createSelector(
   state => state.customer_id
 );
 
-
 export const getPaymentMethodId= createSelector(
   [usersSelector],
   state => state.payment_method_id

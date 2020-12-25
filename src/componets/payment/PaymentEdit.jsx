@@ -3,7 +3,7 @@ import {CardElement, useStripe, useElements} from '@stripe/react-stripe-js';
 import {PrimaryButton, TextDetail, GreyButton} from "../UIkit/index";
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router'
-import { registerCard } from '../../reducks/payments/operations'
+import { registerCard, retrievePaymentMethod } from '../../reducks/payments/operations'
 
 import { getCustomerId, getPaymentMethodId, getUserId} from "../../reducks/users/selectors";
 
@@ -14,23 +14,26 @@ const PaymentEdit = () => {
   const elements = useElements();
   const selector = useSelector(state => state);
   const customerId = getCustomerId(selector);
-  const paymentmethodId = getPaymentMethodId(selector);
+  const paymentMethodId= getPaymentMethodId(selector);
 
-  
+  const [card, setCard] = useState({})
 
-  // 登録カード情報を格納するstate
-  const [card, setState] = useState({});
-  
-  useEffect(()=>{
-    console.log(customerId);
-    console.log(paymentmethodId);
-  
-  },[])
 
   // カード情報を登録するメソット
   const register = useCallback(() => {
       dispatch(registerCard(stripe, elements))
   }, [stripe, elements])
+
+
+   useEffect(() => {
+        (async() => {
+            const cardData = await retrievePaymentMethod(paymentMethodId)
+            if (cardData) {
+                console.log(cardData);
+                setCard(cardData)
+            }
+        })()
+    },[paymentMethodId]);
   
   return(
     <section className="c-section-container">

@@ -27,6 +27,21 @@ const createCustomer = async (email, paymentMethodId, uid) => {
     return JSON.parse(customerResponse.body);
 }
 
+// ユーザーのカード情報を取得するAPIを叩くメソット
+export const retrievePaymentMethod = async (paymentMethodId) => {
+    const response = await fetch(BASE_URL + '/v1/paymentMethod', {
+        method: 'POST',
+        headers: headers,
+        body: JSON.stringify({
+            paymentMethodId: paymentMethodId
+        })
+    });
+
+    const paymentMethodResponse = await response.json();
+    const paymentMethod = JSON.parse(paymentMethodResponse.body);
+    return paymentMethod.card;
+}
+
 
 export const registerCard = (stripe, elements) => {
   return async (dispatch, getState)=> {
