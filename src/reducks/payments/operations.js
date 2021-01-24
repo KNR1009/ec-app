@@ -151,3 +151,5 @@ export const updatePaymentMethod = async (customerId, prevPaymentMethodId, nextP
     const paymentMethod = JSON.parse(paymentMethodResponse.body);
     return paymentMethod.card
 }
+
+
