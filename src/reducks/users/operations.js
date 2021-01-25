@@ -91,9 +91,8 @@ export const signIn = (email, password) => {
       return false;
     }
     
-    auth.signInWithEmailAndPassword(email, password).then((result) => {
+    await auth.signInWithEmailAndPassword(email, password).then((result) => {
       const user = result.user;
-
       // ユーザが存在すれば処理にすすむ
       if (user) {
         const uid = user.uid;
@@ -102,7 +101,6 @@ export const signIn = (email, password) => {
           .get()
           .then((snapshot) => {
             const data = snapshot.data();
-
             // 以下でアクションを呼び出しsiginの処理を行う
             dispatch(
               signInAction({
@@ -119,6 +117,8 @@ export const signIn = (email, password) => {
             dispatch(push("/"));
           });
       }
+    }).catch((error)=>{
+      alert(error.message)
     });
 
   }
