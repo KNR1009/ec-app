@@ -10,6 +10,7 @@ const ProductList = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state) => state);
   const products = getProducts(selector)
+  
 
   // クエリパラメタを取得する
   const query = selector.router.location.search;
@@ -19,6 +20,8 @@ const ProductList = () => {
   useEffect(()=>{
       dispatch(fetchProducts(gender, category));
   }, [query])
+
+
 
 
   return(

@@ -33,6 +33,10 @@ export const getUserId = createSelector(
   state => state.uid
 );
 
+export const getRole = createSelector(
+  [usersSelector],
+  state => state.role
+);
 
 
 export const getUsername = createSelector([usersSelector], (state) => state.username);

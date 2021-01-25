@@ -13,10 +13,12 @@ import HistoryIcon from '@material-ui/icons/History';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import {TextInput} from "../UIkit";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {push} from 'connected-react-router'
 import {signOut} from '../../reducks/users/operations'
 import { db } from '../../firebase';
+import { getRole } from "../../reducks/users/selectors"
+import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -45,6 +47,10 @@ const CloseableDrawer = (props) => {
     const [searchKeyword, setKeyword] = useState("")
     const dispatch = useDispatch()
 
+    // 管理ユーザーかの判定
+    const selector = useSelector((state)=>state)
+    const userRole = getRole(selector)
+
     // テキスト入力のonchangeメソット
     const inputSearchKeyword = useCallback((e)=>{
         setKeyword(e.target.value);
@@ -65,7 +71,6 @@ const CloseableDrawer = (props) => {
     ])
 
     const menus = [
-    {func: selectMenu, label: "商品登録",    icon: <AddCircleIcon/>, id: "register", value: "/product/edit"},
     {func: selectMenu, label: "注文履歴",    icon: <HistoryIcon/>,   id: "history",  value: "/order/history"},
     {func: selectMenu, label: "プロフィール", icon: <PersonIcon/>,    id: "profile",  value: "/user/mypage"},
     ];
@@ -124,6 +129,23 @@ return(
                     <ListItemText primary={menu.label}/>
             </ListItem>
         ))}
+        {/* 管理ユーザーのみ */}
+        {userRole === "administrator" && (
+        <>
+            <ListItem button key="register" onClick={(e)=>{selectMenu(e, "/product/edit")}}>
+                <ListItemIcon>
+                <AddCircleIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"商品の登録"}/>
+            </ListItem>
+            <ListItem button key="shipping" onClick={(e)=>{selectMenu(e, "/product/shipping")}}>
+                <ListItemIcon>
+                    <LocalShippingIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"配送料の設定"}/>
+            </ListItem>
+        </>)}
+        {/* 管理ユーザーのみ */}
         <ListItem button key="logout" onClick={()=>dispatch(signOut())}>
             <ListItemIcon>
             <ExitToAppIcon />
