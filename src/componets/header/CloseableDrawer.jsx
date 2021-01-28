@@ -12,7 +12,7 @@ import AddCircleIcon from '@material-ui/icons/AddCircle';
 import HistoryIcon from '@material-ui/icons/History';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import {TextInput} from "../UIkit";
+import {TextInput, ModalIN} from "../UIkit";
 import { useDispatch, useSelector } from 'react-redux';
 import {push} from 'connected-react-router'
 import {signOut} from '../../reducks/users/operations'
@@ -20,6 +20,15 @@ import { db } from '../../firebase';
 import { getRole } from "../../reducks/users/selectors"
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
+
+// モーダル
+import Modal from '@material-ui/core/Modal';
+import Backdrop from '@material-ui/core/Backdrop';
+import Fade from '@material-ui/core/Fade';
+import { PrimaryButton } from '../UIkit'
+import CancelIcon from '@material-ui/icons/Cancel';
+
+
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -38,6 +47,22 @@ const useStyles = makeStyles((theme) =>
             alignItems: 'center',
             display: 'flex',
             marginLeft: 32
+        },
+           modal: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        paper: {
+            backgroundColor: "#EEEEEE",
+            outline: 'none',
+            borderRadius: '10px',
+            boxShadow: theme.shadows[5],
+            padding: theme.spacing(2, 3, 30),
+        },
+        elright: {
+            textAlign: "right",
+            cursor: "pointer"
         }
     }),
 );
@@ -47,9 +72,17 @@ const CloseableDrawer = (props) => {
     const {container} = props;
     const [searchKeyword, setKeyword] = useState("")
     const dispatch = useDispatch()
+    // モーダルの開閉管理
+    const [isOpen, setIsopen] = useState(false)
 
-    // モダールの開閉
-    const [isopenModal, setIsopenModal] = useState(false)
+    const handleOpen = () => {
+        setIsopen(true);
+    };
+
+    const handleClose = () => {
+        setIsopen(false);
+    };
+
 
     // 管理ユーザーかの判定
     const selector = useSelector((state)=>state)
@@ -97,7 +130,13 @@ const CloseableDrawer = (props) => {
             })  
     },[])
 
+    // モダールの開閉
+    const openModal = useCallback(()=>{
+        setIsopen(true)
+    })
+
 return(
+<>
 <nav className="classes drawer">
     <Drawer
         container={container}
@@ -150,7 +189,7 @@ return(
             </ListItem>
         </>)}
         {/* 管理ユーザーのみ */}
-        <ListItem button key="register" onClick={(e)=>{selectMenu(e, "/product/edit")}}>
+        <ListItem button key="contact" onClick={()=>{handleOpen()}}>
           <ListItemIcon>
                <ContactMailIcon/>
                </ListItemIcon>
@@ -171,10 +210,32 @@ return(
                 </ListItem>
             ))}
         </List>
-    
-</div>
-</Drawer>
-</nav>
+        </div>
+        </Drawer>
+        </nav>
+    <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={isOpen}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={isOpen}>
+          <div className={classes.paper}>
+            <div className={classes.elright}><CancelIcon fontSize="large"
+            onClick={()=>handleClose()}
+            /></div>
+            <div className="module-spacer--medium"></div>
+            <PrimaryButton label={"送信"}/>
+          </div>
+        </Fade>
+    </Modal>
+</>
 )
 }
 
