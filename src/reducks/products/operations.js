@@ -18,6 +18,8 @@ export const deleteProduct = (id)=>{
   }
 }
 
+
+
 // firebaseから商品情報を取得
 export const fetchProducts = (gender, category) => {
   

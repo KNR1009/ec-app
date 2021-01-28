@@ -19,6 +19,7 @@ import {signOut} from '../../reducks/users/operations'
 import { db } from '../../firebase';
 import { getRole } from "../../reducks/users/selectors"
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
+import ContactMailIcon from '@material-ui/icons/ContactMail';
 
 const useStyles = makeStyles((theme) =>
     createStyles({
@@ -46,6 +47,9 @@ const CloseableDrawer = (props) => {
     const {container} = props;
     const [searchKeyword, setKeyword] = useState("")
     const dispatch = useDispatch()
+
+    // モダールの開閉
+    const [isopenModal, setIsopenModal] = useState(false)
 
     // 管理ユーザーかの判定
     const selector = useSelector((state)=>state)
@@ -146,6 +150,12 @@ return(
             </ListItem>
         </>)}
         {/* 管理ユーザーのみ */}
+        <ListItem button key="register" onClick={(e)=>{selectMenu(e, "/product/edit")}}>
+          <ListItemIcon>
+               <ContactMailIcon/>
+               </ListItemIcon>
+           <ListItemText primary={"お問い合わせ"}/>
+        </ListItem>
         <ListItem button key="logout" onClick={()=>dispatch(signOut())}>
             <ListItemIcon>
             <ExitToAppIcon />

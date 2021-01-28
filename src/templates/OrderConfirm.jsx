@@ -1,4 +1,5 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useMemo, useState, useEffect} from 'react';
+import { db } from '../firebase';
 import {useDispatch, useSelector} from "react-redux";
 import List from "@material-ui/core/List";
 import {getProductsInCart} from "../reducks/users/selectors";
@@ -51,11 +52,22 @@ const OrderConfirm = () => {
   }, [productsInCart])
 
   // 送料の設定(1万円以上は無料)
-  const shippingFee = (subtotal >= 10000) ? 0 : 210;
+  const [shippingFee ,setShippingFee] = useState("")
+  // const shippingFee = (subtotal >= 10000) ? 0 : 210;
+  const shipmentId = "6ugyx5UkDGSdrtzHJzTT";
+
+  useEffect(()=>{
+    (async () => {
+      await db.collection("shipping").doc(shipmentId).get().then((doc)=>{
+          const data = doc.data()
+          setShippingFee(data.shipping_fee)
+      })
+    })()
+},[])
 
   // 税金
   const tax = (subtotal) * 0.1
-  const total = subtotal + shippingFee + tax
+  const total = subtotal + tax + Number(shippingFee)
 
 
   // 注文ボタンがクリックされた際に呼び出される

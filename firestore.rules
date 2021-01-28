@@ -15,7 +15,6 @@ service cloud.firestore {
        match /orders/{ordersId} {
       allow read, write: if request.auth.uid == userId;
     }
-
     }
 
     match /products/{productId}{
@@ -27,6 +26,11 @@ service cloud.firestore {
      allow read: if request.auth.uid != null;
      allow write: if request.auth.uid != null;
     }
+
+       match /shipping/{shipmentId} {
+      allow read, write: if request.auth.uid != null;
+    }
+    
   }
 
 }

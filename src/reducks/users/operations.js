@@ -118,7 +118,7 @@ export const signIn = (email, password) => {
           });
       }
     }).catch((error)=>{
-      alert(error.message)
+      alert('パスワードかメールアドレスが違います')
     });
 
   }
