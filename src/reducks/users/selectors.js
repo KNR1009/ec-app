@@ -38,5 +38,10 @@ export const getRole = createSelector(
   state => state.role
 );
 
+export const getEmail = createSelector(
+  [usersSelector],
+  state => state.email
+);
+
 
 export const getUsername = createSelector([usersSelector], (state) => state.username);

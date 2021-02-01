@@ -17,7 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {push} from 'connected-react-router'
 import {signOut} from '../../reducks/users/operations'
 import { db } from '../../firebase';
-import { getRole } from "../../reducks/users/selectors"
+import { getRole, getEmail } from "../../reducks/users/selectors"
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
 
@@ -27,6 +27,7 @@ import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import { PrimaryButton } from '../UIkit'
 import CancelIcon from '@material-ui/icons/Cancel';
+
 
 
 
@@ -58,11 +59,17 @@ const useStyles = makeStyles((theme) =>
             outline: 'none',
             borderRadius: '10px',
             boxShadow: theme.shadows[5],
-            padding: theme.spacing(2, 3, 30),
+            padding: theme.spacing(2, 3, 10),
         },
         elright: {
             textAlign: "right",
             cursor: "pointer"
+        },
+        filed: {
+            display:'block'
+        },
+        textcenter: {
+            textAlign:'center'
         }
     }),
 );
@@ -74,6 +81,8 @@ const CloseableDrawer = (props) => {
     const dispatch = useDispatch()
     // モーダルの開閉管理
     const [isOpen, setIsopen] = useState(false)
+    const [email, setEmail] = useState("")
+    const [contact, setContact] = useState("")
 
     const handleOpen = () => {
         setIsopen(true);
@@ -225,15 +234,39 @@ return(
           timeout: 500,
         }}
       >
+        <>
         <Fade in={isOpen}>
           <div className={classes.paper}>
             <div className={classes.elright}><CancelIcon fontSize="large"
             onClick={()=>handleClose()}
             /></div>
+            <TextInput
+            fullWidth={true}
+            label={"メールアドレス"}
+            multiline={false}
+            required={true}
+            rows={1}
+            value={email}
+            type={"text"}
+            onChange={(e)=>{setEmail(e.target.value)}}
+            />
+            <TextInput
+            fullWidth={true}
+            label={"お問い合わせ内容"}
+            multiline={true}
+            required={true}
+            rows={4}
+            value={contact}
+            type={"text"}
+            onChange={(e)=>{setContact(e.target.value)}}
+            />
             <div className="module-spacer--medium"></div>
-            <PrimaryButton label={"送信"}/>
+            <div className={classes.textcenter}>
+              <PrimaryButton label={"送信"}/>
+            </div>
           </div>
         </Fade>
+        </>
     </Modal>
 </>
 )
