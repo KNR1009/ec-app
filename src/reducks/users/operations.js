@@ -194,7 +194,11 @@ export const signUp = (username, email, password, confirmPassword) => {
             .doc(uid)
             .set(userInitialData)
             .then(() => {
+              alert('アカウントの登録に成功しました')
               dispatch(push("/"));
+            }).catch((error)=>{
+              alert('アカウントの登録に失敗しました')
+              return 
             });
           
           
