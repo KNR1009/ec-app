@@ -83,7 +83,7 @@ const CloseableDrawer = (props) => {
     const [isOpen, setIsopen] = useState(false)
     const [email, setEmail] = useState("")
     const [contact, setContact] = useState("")
-
+    
     const handleOpen = () => {
         setIsopen(true);
     };
@@ -91,6 +91,21 @@ const CloseableDrawer = (props) => {
     const handleClose = () => {
         setIsopen(false);
     };
+
+    // お問い合わせ内容をfirebaseへ保存
+    const contactSave = useCallback((email, contact)=>{
+       db.collection('contact').doc().set({
+           email: email,
+           contact: contact
+       })
+       .then(()=>{
+           alert('お問い合わせ内容を送信しました')
+           dispatch(push('/'))
+       }).catch((error)=>{
+           throw new Error(error)
+       })
+    })
+
 
 
     // 管理ユーザーかの判定
@@ -262,7 +277,7 @@ return(
             />
             <div className="module-spacer--medium"></div>
             <div className={classes.textcenter}>
-              <PrimaryButton label={"送信"}/>
+              <PrimaryButton label={"送信"} onClick={()=>{contactSave(email, contact)}}/>
             </div>
           </div>
         </Fade>
