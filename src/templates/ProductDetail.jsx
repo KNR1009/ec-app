@@ -6,6 +6,8 @@ import {ImageSwiper, SizeTable} from '../componets/Producuts'
 import { useDispatch } from 'react-redux';
 import { addProductToCart } from '../reducks/users/operations'
 
+
+
 const useStyles = makeStyles((theme) => ({
     sliderBox: {
         [theme.breakpoints.down('sm')]: {
@@ -47,6 +49,7 @@ const returnCodeToBr = (text) => {
 }
 
 const ProductDetail = ()=>{
+
 
     const classes = useStyles()
     const dispatch = useDispatch()

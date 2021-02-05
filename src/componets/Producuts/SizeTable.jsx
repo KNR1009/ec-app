@@ -9,19 +9,45 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import {makeStyles} from "@material-ui/styles";
 
-const useStyles = makeStyles({
-  iconCell: {
+// フラッシュバーの作成
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+const useStyles = makeStyles((theme) => ({
+   iconCell: {
     height: 48,
     width: 48,
   },
-  
+  root: {
+    width: '100%',
+    '& > * + *': {
+      marginTop: theme.spacing(2),
+    },
+  },
 })
+)
 
-
+// フラッシュバー
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const SizeTable = (props) => {
   const sizes = props.sizes;
   const classes = useStyles();
+
+      // フラッシュバー
+    const [open, setOpen] = React.useState(false);
+        const handleClick = () => {
+        setOpen(true);
+    };
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+        return;
+        }
+        setOpen(false);
+    };
+    // フラッシュバー終了
 
   return(
     <TableContainer>
@@ -35,7 +61,11 @@ const SizeTable = (props) => {
               <TableCell className={classes.icon}>
                   {size.quantity > 0 ? (
                   <IconButton>
-                    <ShoppingCartIcon onClick={()=>props.addProduct(size.size)}/>
+                    <ShoppingCartIcon onClick={()=>
+                      {props.addProduct(size.size)
+                      handleClick()}
+                      }
+                      />
                   </IconButton>
                   ): (
                       <div>売り切れ</div>
@@ -51,7 +81,13 @@ const SizeTable = (props) => {
         )}
       </TableBody>
      </Table>
+      <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="success">
+          商品がカートに追加されました
+        </Alert>
+      </Snackbar>
   </TableContainer  >
+  
   )
 }
 
