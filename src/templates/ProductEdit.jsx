@@ -6,11 +6,17 @@ import { ImageArea } from '../componets/Producuts/index'
 import { db } from '../firebase';
 import {SetSizesArea } from '../componets/Producuts/'
 
+// フラッシュバーの作成
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
+
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
   const ProductEdit = () => {
 
   const dispatch = useDispatch();
-
   // 商品の編集
   let id = window.location.pathname.split('/product/edit')[1];
   if(id !== ""){
@@ -53,6 +59,19 @@ import {SetSizesArea } from '../componets/Producuts/'
     { id: "male", name: "メンズ" },
     { id: "female", name: "レディース" },
   ];
+
+      // フラッシュバー
+  const [open, setOpen] = React.useState(false);
+      const handleClick = () => {
+      setOpen(true);
+  };
+  const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+      return;
+      }
+      setOpen(false);
+  };
+  // フラッシュバー終了
 
     // idが一致する商品情報をrenderした際に取得
   useEffect(()=>{
@@ -119,10 +138,18 @@ import {SetSizesArea } from '../componets/Producuts/'
                 <div className="center">
                     <PrimaryButton
                         label={"商品情報を保存"}
-                        onClick={() => dispatch(saveProduct(id, name, description, category, gender, price, images, sizes ))}
+                        onClick={() => {
+                          dispatch(saveProduct(id, name, description, category, gender, price, images, sizes ))
+                          handleClick()
+                        }}
                     />
                 </div>
             </div>
+            <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+              <Alert onClose={handleClose} severity="success">
+                商品を追加しました
+              </Alert>
+            </Snackbar>
         </section>
   );
 }

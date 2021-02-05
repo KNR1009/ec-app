@@ -128,7 +128,6 @@ export const orderProduct = (productsInCart, price) => {
                 // 全てが完了したら上記を保存して、注文確認ページへpush
                 orderRef.set(history);
                 dispatch(push('/'))
-
             }).catch(()=>{
               alert('注文処理に失敗しました。通信環境もご確認の、もう一度お試しください')
             })
@@ -169,7 +168,9 @@ export const saveProduct = (
 
      return productsRef.doc(id).set(data, {merge: true})
             .then(() => {
-                dispatch(push('/'))
+                setTimeout(()=>{
+                  dispatch(push('/'))
+                },1500)
             }).catch((error) => {
                 throw new Error(error)
             })

@@ -11,7 +11,13 @@ import { TextDetail } from '../componets/UIkit/index'
 import Divider from '@material-ui/core/Divider';
 import { orderProduct } from '../reducks/products/operations'
 
+// フラッシュバーの作成
+import Snackbar from '@material-ui/core/Snackbar';
+import MuiAlert from '@material-ui/lab/Alert';
 
+function Alert(props) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const useStyles = makeStyles((theme) => ({
   detailBox: {
@@ -75,6 +81,19 @@ const OrderConfirm = () => {
     dispatch(orderProduct(productsInCart, total))
   }, [productsInCart, total])
 
+        // フラッシュバー
+  const [open, setOpen] = React.useState(false);
+      const handleClick = () => {
+      setOpen(true);
+  };
+  const handleClose = (event, reason) => {
+      if (reason === 'clickaway') {
+      return;
+      }
+      setOpen(false);
+  };
+  // フラッシュバー終了
+
   return(
     <section className="c-section-wrapin">
       <h2 className="u-text__headline">注文の確認</h2>
@@ -95,9 +114,23 @@ const OrderConfirm = () => {
           <TextDetail label={'送料'} value={'¥' + shippingFee + '円'}/>
           < Divider />
           <TextDetail label={'合計(税込み)'} value={'¥' + total.toLocaleString()+ '円'}/>
-          <PrimaryButton label={"注文を確定"}   onClick={()=>order()}/>
+          <PrimaryButton label={"注文を確定"}   onClick={()=>{
+            if(productsInCart.length < 1){
+                alert('カートの中身が空です')
+            }else{
+            setTimeout(() => {
+              order()
+            }, 1500);
+            handleClick()
+            }
+          }}/>
         </div>
       </div>
+    <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+      <Alert onClose={handleClose} severity="success">
+        商品の注文が完了しました
+      </Alert>
+    </Snackbar>
     </section>
   )
 }
