@@ -3,7 +3,7 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /users/{userId} {
-      allow read: if request.auth.uid != null;
+      allow read: if request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "administrator" ;
       allow create;
       allow update: if request.auth.uid == userId;
       allow delete: if request.auth.uid == userId;
@@ -13,7 +13,8 @@ service cloud.firestore {
     }
     
        match /orders/{ordersId} {
-      allow read, write: if request.auth.uid == userId;
+      allow read: if request.auth.uid == userId || get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == "administrator";
+      allow write: if request.auth.uid == userId;
     }
     }
 
