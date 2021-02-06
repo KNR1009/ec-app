@@ -10,6 +10,8 @@ import {useSelector} from "react-redux";
 import {getUserId} from "../../reducks/users/selectors";
 import {db} from "../../firebase/index"
 
+
+
 const useStyles = makeStyles((theme)=>({
     list:{
       height: 128,
@@ -22,8 +24,9 @@ const useStyles = makeStyles((theme)=>({
     },
     text:{
       width: '100%'
-    }
+    },
 }))
+
 
 const CartListItem  = (props) => {
   const classes = useStyles()
@@ -38,6 +41,8 @@ const CartListItem  = (props) => {
       return db.collection('users').doc(uid).collection('cart').doc(id).delete();
   }
 
+
+
   return(
     <>
       <ListItem className={classes.list}>
@@ -48,7 +53,9 @@ const CartListItem  = (props) => {
            <ListItemText primary={props.product.name} secondary={'サイズ : '+ props.product.size}/>
            <ListItemText primary={'¥' + price} />
         </div>
-        <IconButton onClick={()=>{ removeProductFromCart(props.product.cartId)}}>
+        <IconButton onClick={()=>{ 
+          removeProductFromCart(props.product.cartId)
+        }}>
           <DeleteIcon />
         </IconButton>
       </ListItem>

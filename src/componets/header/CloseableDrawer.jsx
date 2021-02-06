@@ -20,6 +20,7 @@ import { db } from '../../firebase';
 import { getRole, getEmail } from "../../reducks/users/selectors"
 import LocalShippingIcon from '@material-ui/icons/LocalShipping';
 import ContactMailIcon from '@material-ui/icons/ContactMail';
+import LocalMallOutlinedIcon from '@material-ui/icons/LocalMallOutlined';
 
 // モーダル
 import Modal from '@material-ui/core/Modal';
@@ -211,6 +212,13 @@ return(
                 </ListItemIcon>
                 <ListItemText primary={"配送料の設定"}/>
             </ListItem>
+            <ListItem button key="orderlist" onClick={(e)=>{selectMenu(e, "/order/list")}}>
+                <ListItemIcon>
+                    <LocalMallOutlinedIcon/>
+                </ListItemIcon>
+                <ListItemText primary={"注文商品一覧"}/>
+            </ListItem>
+
         </>)}
         {/* 管理ユーザーのみ */}
         <ListItem button key="contact" onClick={()=>{handleOpen()}}>
