@@ -41,6 +41,7 @@ const Orderlist = () => {
             userdata.push(user.id)
         })
         userdata.forEach(async(uid)=>{
+
           const order = await db.collection('users').doc(uid)
           .collection('orders').doc().get()
           if(order != ""){
